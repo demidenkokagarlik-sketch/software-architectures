@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shop
+      POSTGRES_USER: shop
+      POSTGRES_PASSWORD: shop
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shop -d shop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - REPO_ADAPTER=db
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=shop
+      - DB_USER=shop
+      - DB_PASS=shop
+      - CSV_PATH=/data/orders.csv
+    volumes:
+      - csv_data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  csv_data:
