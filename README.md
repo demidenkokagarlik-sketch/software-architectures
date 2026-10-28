@@ -1,16 +1,31 @@
-# Програмні архітектури — навчальний проєкт
+# 🚀 Архітектурні шаблони та патерни ПЗ
 
-Проєкт містить чотири окремі приклади реалізації архітектур програмного забезпечення на Python. Кожна папка має власний `README.md`, Dockerfile/Compose, приклади запитів і тести там, де це передбачено завданням.[cite: 1]
+Цей репозиторій містить практичні реалізації чотирьох фундаментальних архітектурних стилів розробки програмного забезпечення. Усі приклади реалізовані ізольовано у відповідних директоріях з використанням сучасних інструментів контейнеризації.
 
-## Структура
+---
 
-* `layered-monolith/` — багатошаровий REST API товарів + PostgreSQL, SQL-міграція, DI через application use-cases, multi-stage Dockerfile і юніт-тести.[cite: 1]
-* `hexagonal/` — ядро, порт `OrderRepository`, адаптери Postgres/CSV та перемикання через `REPO_ADAPTER`.[cite: 1]
-* `microservices/` — Catalog, Users, Orders та NGINX API Gateway, 4 контейнери, healthchecks, OpenAPI і e2e-перевірка.[cite: 1]
-* `event-driven/` — Orders producer, Billing consumer, Notifications consumer, Kafka + Zookeeper, створення топіка, SQLite-дедуплікація та JSON Schema подій.[cite: 1]
+## 📂 Огляд структури проєкту
 
-## Запуск (виконувати команди з відповідної папки)
+* **`layered-monolith/`** — Класичний багатошаровий моноліт (Presentation, Application, Domain, Infrastructure). Включає REST API для товарів, взаємодію з PostgreSQL, SQL-скрипти міграцій та чіткий розподіл шарів через Dependency Injection.
+* **`hexagonal/`** — Гексагональна архітектура (Ports & Adapters). Ядро програми повністю ізольоване від зовнішнього середовища, з можливістю гнучкого перемикання сховищ даних (PostgreSQL або CSV) за допомогою змінних середовища.
+* **`microservices/`** — Розподілена мікросервісна система, що складається з трьох незалежних сервісів (`catalog`, `users`, `orders`) та централізованого зворотного проксі-шлюзу на базі NGINX (API Gateway).
+* **`event-driven/`** — Подія-орієнтована архітектура (Event-Driven). Асинхронна комунікація сервісів у реальному часі за допомогою брокера повідомлень Apache Kafka та Zookeeper.
+
+---
+
+## ⚙️ Швидкий запуск
+
+Для розгортання будь-якого з модулів перейдіть до відповідної папки та скористайтеся Docker Compose:
 
 ```bash
-cd layered-monolith
-docker compose up --build
+# Запуск багатошарового моноліту
+cd layered-monolith && docker compose up --build
+
+# Запуск гексагонального додатку
+cd hexagonal && docker compose up --build
+
+# Запуск мікросервісів та шлюзу
+cd microservices && docker compose up --build
+
+# Запуск середовища на базі Kafka
+cd event-driven && docker compose up --build
