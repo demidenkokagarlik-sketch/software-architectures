@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - REPO_ADAPTER=file
+      - CSV_PATH=/data/orders.csv
+    volumes:
+      - ./data:/data
